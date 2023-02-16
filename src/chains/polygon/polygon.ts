@@ -79,7 +79,7 @@ export class Polygon extends EthereumBase implements Ethereumish {
       spender = SushiswapConfig.config.sushiswapRouterAddress(
         'polygon',
         this._chain
-      );      
+      );
     } else {
       spender = reqSpender;
     }
