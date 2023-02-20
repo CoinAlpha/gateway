@@ -28,11 +28,14 @@
     "@ethersproject-xdc/solidity": "file:../@ethersproject-xdc/solidity",
     "@ethersproject-xdc/strings": "file:../@ethersproject-xdc/strings",
     "@ethersproject-xdc/transactions": "file:../@ethersproject-xdc/transactions",
-    "@ethersproject-xdc/units": "file:../@ethersproject-xdc/unit",
+    "@ethersproject-xdc/units": "file:../@ethersproject-xdc/units",
     "@ethersproject-xdc/wallet": "file:../@ethersproject-xdc/wallet",
     "@ethersproject-xdc/web": "file:../@ethersproject-xdc/web",
     "@ethersproject-xdc/wordlists": "file:../@ethersproject-xdc/wordlists"
   },
+  "devDependencies": {
+    "typescript": "4.4.4"
+  },    
   "description": "Umbrella package for most common Ethers libraries.",
   "ethereum": "donations.ethers.eth",
   "funding": [
@@ -59,6 +62,7 @@
     "url": "git://github.com/ethers-io/ethers.js.git"
   },
   "scripts": {
+    "build": "tsc --skipLibCheck --project ./",    
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "sideEffects": false,
