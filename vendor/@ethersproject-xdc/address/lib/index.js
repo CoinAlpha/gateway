@@ -69,11 +69,11 @@ function getAddress(address) {
     if (typeof (address) !== "string") {
         logger.throwArgumentError("invalid address", "address", address);
     }
-    console.log('getAddress', address);
     if (address && address.length === 43 && address.slice(0, 3) === 'xdc') {
         address = '0x' + address.slice(3);
     }
     if (address.match(/^(0x)?[0-9a-fA-F]{40}$/)) {
+        console.log('address is normal', address);
         // Missing the 0x prefix
         if (address.substring(0, 2) !== "0x") {
             address = "0x" + address;
@@ -86,6 +86,7 @@ function getAddress(address) {
         // Maybe ICAP? (we only support direct mode)
     }
     else if (address.match(/^XE[0-9]{2}[0-9A-Za-z]{30,31}$/)) {
+        console.log('address is icap', address);
         // It is an ICAP address with a bad checksum
         if (address.substring(2, 4) !== ibanChecksum(address)) {
             logger.throwArgumentError("bad icap checksum", "address", address);

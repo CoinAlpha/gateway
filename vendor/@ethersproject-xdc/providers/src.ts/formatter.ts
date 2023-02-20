@@ -322,11 +322,19 @@ export class Formatter {
         if (transaction.gas != null && transaction.gasLimit == null) {
             transaction.gasLimit = transaction.gas;
         }
+  console.log('transaction before alter', transaction);      
 
         if (transaction.to && transaction.to.length === 43 && transaction.to.slice(0, 3) === 'xdc') {
              transaction.to = '0x' + transaction.to.slice(3);
         }
 
+        if (transaction.from && transaction.from.length === 43 && transaction.from.slice(0, 3) === 'xdc') {
+             transaction.from = '0x' + transaction.from.slice(3);
+        }
+
+      
+      console.log('transaction.to after alter', transaction.to);
+  console.log('transaction.from after alter', transaction.from);      
         // Some clients (TestRPC) do strange things like return 0x0 for the
         // 0 address; correct this to be a real address
         if (transaction.to && BigNumber.from(transaction.to).isZero()) {
