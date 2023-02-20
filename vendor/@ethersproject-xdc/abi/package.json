@@ -11,6 +11,9 @@
     "@ethersproject-xdc/properties": "file:../properties",
     "@ethersproject-xdc/strings": "file:../strings"
   },
+  "devDependencies": {
+    "typescript": "4.4.4"
+  },
   "description": "Utilities and Classes for parsing, formatting and managing Ethereum ABIs.",
   "ethereum": "donations.ethers.eth",
   "funding": [
@@ -40,6 +43,7 @@
     "url": "git://github.com/ethers-io/ethers.js.git"
   },
   "scripts": {
+    "build": "tsc --skipLibCheck --project ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "sideEffects": false,

@@ -1,7 +1,7 @@
 {
   "exclude": [],
   "include": [
-    "./src.ts/*"
+    "./src.ts/**/*"
   ],
   "compilerOptions": {
     "outDir": "./lib/",

@@ -19,6 +19,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.decrypt = exports.CrowdsaleAccount = void 0;
+// @ts-ignore
 var aes_js_1 = __importDefault(require("aes-js"));
 var address_1 = require("@ethersproject-xdc/address");
 var bytes_1 = require("@ethersproject-xdc/bytes");

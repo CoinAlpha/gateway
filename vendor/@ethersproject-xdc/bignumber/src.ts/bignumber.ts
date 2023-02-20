@@ -295,7 +295,7 @@ export class BigNumber implements Hexable {
 }
 
 // Normalize the hex string
-function toHex(value: string | BN): string {
+function toHex(value: string | any): string {
 
     // For BN, call on the hex string
     if (typeof(value) !== "string") {
@@ -337,11 +337,11 @@ function toHex(value: string | BN): string {
     return value;
 }
 
-function toBigNumber(value: BN): BigNumber {
+function toBigNumber(value: any): BigNumber {
     return BigNumber.from(toHex(value));
 }
 
-function toBN(value: BigNumberish): BN {
+function toBN(value: BigNumberish): any {
     const hex = BigNumber.from(value).toHexString();
     if (hex[0] === "-") {
         return (new BN("-" + hex.substring(3), 16));

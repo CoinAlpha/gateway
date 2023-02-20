@@ -4,6 +4,9 @@
     "@ethersproject-xdc/bytes": "file:../bytes",
     "js-sha3": "0.8.0"
   },
+  "devDependencies": {
+    "typescript": "4.4.4"
+  },  
   "description": "The keccak256 hash function for ethers.",
   "ethereum": "donations.ethers.eth",
   "funding": [
@@ -34,6 +37,7 @@
     "url": "git://github.com/ethers-io/ethers.js.git"
   },
   "scripts": {
+    "build": "tsc --skipLibCheck --project ./",    
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "sideEffects": false,

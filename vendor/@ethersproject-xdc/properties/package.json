@@ -3,6 +3,9 @@
   "dependencies": {
     "@ethersproject-xdc/logger": "file:../logger"
   },
+  "devDependencies": {
+    "typescript": "4.4.4"
+  },  
   "description": "Properties utility functions for ethers.",
   "ethereum": "donations.ethers.eth",
   "funding": [
@@ -34,7 +37,7 @@
   },
   "scripts": {
     "auto-build": "npm run build -- -w",
-    "build": "tsc -p ./tsconfig.json",
+    "build": "tsc --skipLibCheck --project ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "sideEffects": false,

@@ -1,5 +1,6 @@
 "use strict";
 
+// @ts-ignore
 import aes from "aes-js";
 
 import { ExternallyOwnedAccount } from "@ethersproject-xdc/abstract-signer";

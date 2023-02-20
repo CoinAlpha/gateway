@@ -10,6 +10,9 @@
     "@ethersproject-xdc/bytes": "file:../bytes",
     "@ethersproject-xdc/logger": "file:../logger"
   },
+  "devDependencies": {
+    "typescript": "4.4.4"
+  },  
   "description": "Random utility functions for ethers.",
   "ethereum": "donations.ethers.eth",
   "funding": [
@@ -41,6 +44,7 @@
     "url": "git://github.com/ethers-io/ethers.js.git"
   },
   "scripts": {
+    "build": "tsc --skipLibCheck --project ./",    
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "sideEffects": false,

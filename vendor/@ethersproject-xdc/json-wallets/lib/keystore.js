@@ -55,6 +55,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.encrypt = exports.decrypt = exports.decryptSync = exports.KeystoreAccount = void 0;
+// @ts-ignore
 var aes_js_1 = __importDefault(require("aes-js"));
 var scrypt_js_1 = __importDefault(require("scrypt-js"));
 var address_1 = require("@ethersproject-xdc/address");
