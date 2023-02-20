@@ -115,6 +115,30 @@ export class Xdc extends EthereumBase implements Ethereumish {
     return this._xdcProvider.getTransaction(txHash);
   }
 
+  // returns an ethereum TransactionReceipt for a txHash if the transaction has been mined.
+  async getTransactionReceipt(
+    txHash: string
+  ): Promise<providers.TransactionReceipt | null> {
+    if (this.cache.keys().includes(txHash)) {
+      // If it's in the cache, return the value in cache, whether it's null or not
+      return this.cache.get(txHash) as providers.TransactionReceipt;
+    } else {
+      // If it's not in the cache,
+      const fetchedTxReceipt = await this._xdcProvider.getTransactionReceipt(
+        txHash
+      );
+
+      this.cache.set(txHash, fetchedTxReceipt); // Cache the fetched receipt, whether it's null or not
+
+      if (!fetchedTxReceipt) {
+        this._xdcProvider.once(txHash, this.cacheTransactionReceipt.bind(this));
+      }
+
+      return fetchedTxReceipt;
+    }
+  }
+  
+
   async close() {
     await super.close();
     if (this._chain in Xdc._instances) {
