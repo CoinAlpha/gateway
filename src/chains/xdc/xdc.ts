@@ -1,6 +1,8 @@
 import abi from '../ethereum/ethereum.abi.json';
 import { logger } from '../../services/logger';
 import { Contract, Transaction, Wallet } from 'ethers';
+import {providers} from 'ethers-xdc';
+
 import { EthereumBase } from '../ethereum/ethereum-base';
 import { getEthereumConfig as getXdcConfig } from '../ethereum/ethereum.config';
 import { Provider } from '@ethersproject/abstract-provider';
@@ -17,6 +19,7 @@ export class Xdc extends EthereumBase implements Ethereumish {
   private _gasPrice: number;
   private _nativeTokenSymbol: string;
   private _chain: string;
+  private _xdcProvider: providers.Provider;
 
   private constructor(network: string) {
     const config = getXdcConfig('xdc', network);
@@ -34,6 +37,7 @@ export class Xdc extends EthereumBase implements Ethereumish {
     this._chain = config.network.name;
     this._nativeTokenSymbol = config.nativeCurrencySymbol;
     this._gasPrice = config.manualGasPrice;
+    this._xdcProvider = new providers.StaticJsonRpcProvider(config.network.nodeURL);    
   }
 
   public static getInstance(network: string): Xdc {
@@ -101,6 +105,10 @@ export class Xdc extends EthereumBase implements Ethereumish {
     return await this.decrypt(encryptedPrivateKey, passphrase);
   }
 
+  async getTransaction(txHash: string): Promise<providers.TransactionResponse> {
+    return this._xdcProvider.getTransaction(txHash);
+  }
+  
   async close() {
     await super.close();
     if (this._chain in Xdc._instances) {
