@@ -69,6 +69,7 @@ function getAddress(address) {
     if (typeof (address) !== "string") {
         logger.throwArgumentError("invalid address", "address", address);
     }
+    console.log('getAddress', address);
     if (address && address.length === 43 && address.slice(0, 3) === 'xdc') {
         address = '0x' + address.slice(3);
     }

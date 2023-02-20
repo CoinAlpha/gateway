@@ -1,7 +1,7 @@
 import abi from '../ethereum/ethereum.abi.json';
 import { logger } from '../../services/logger';
 import { Contract, Transaction, Wallet } from 'ethers';
-import {providers} from 'ethers-xdc';
+import { providers } from 'ethers-xdc';
 
 import { EthereumBase } from '../ethereum/ethereum-base';
 import { getEthereumConfig as getXdcConfig } from '../ethereum/ethereum.config';
@@ -10,7 +10,10 @@ import { XdcswapConfig } from '../../connectors/xdcswap/xdcswap.config';
 import { Ethereumish } from '../../services/common-interfaces';
 import { ConfigManagerV2 } from '../../services/config-manager-v2';
 import { walletPath } from '../../services/base';
-import { convertEthAddressToXdcAddress, convertXdxAddressToEthAddress } from '../../services/wallet/wallet.controllers';
+import {
+  convertEthAddressToXdcAddress,
+  convertXdxAddressToEthAddress,
+} from '../../services/wallet/wallet.controllers';
 import fse from 'fs-extra';
 import { ConfigManagerCertPassphrase } from '../../services/config-manager-cert-passphrase';
 
@@ -37,7 +40,9 @@ export class Xdc extends EthereumBase implements Ethereumish {
     this._chain = config.network.name;
     this._nativeTokenSymbol = config.nativeCurrencySymbol;
     this._gasPrice = config.manualGasPrice;
-    this._xdcProvider = new providers.StaticJsonRpcProvider(config.network.nodeURL);    
+    this._xdcProvider = new providers.StaticJsonRpcProvider(
+      config.network.nodeURL
+    );
   }
 
   public static getInstance(network: string): Xdc {
@@ -106,9 +111,10 @@ export class Xdc extends EthereumBase implements Ethereumish {
   }
 
   async getTransaction(txHash: string): Promise<providers.TransactionResponse> {
+    console.log('this._xdcProvider.getTransaction');
     return this._xdcProvider.getTransaction(txHash);
   }
-  
+
   async close() {
     await super.close();
     if (this._chain in Xdc._instances) {

@@ -34,6 +34,9 @@
     "bech32": "1.1.4",
     "ws": "7.4.6"
   },
+  "devDependencies": {
+    "typescript": "4.4.4"
+  },      
   "description": "Ethereum Providers for ethers.",
   "ethereum": "donations.ethers.eth",
   "funding": [
