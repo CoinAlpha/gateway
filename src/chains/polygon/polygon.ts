@@ -9,6 +9,7 @@ import { SushiswapConfig } from '../../connectors/sushiswap/sushiswap.config';
 import { UniswapConfig } from '../../connectors/uniswap/uniswap.config';
 import { Ethereumish } from '../../services/common-interfaces';
 import { ConfigManagerV2 } from '../../services/config-manager-v2';
+import { OpenoceanConfig } from '../../connectors/openocean/openocean.config';
 
 export class Polygon extends EthereumBase implements Ethereumish {
   private static _instances: { [name: string]: Polygon };
@@ -80,6 +81,8 @@ export class Polygon extends EthereumBase implements Ethereumish {
         'polygon',
         this._chain
       );
+    } else if (reqSpender === 'openocean') {
+      spender = OpenoceanConfig.config.routerAddress('polygon', this._chain);
     } else {
       spender = reqSpender;
     }
