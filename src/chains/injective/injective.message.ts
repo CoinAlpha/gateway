@@ -22,6 +22,7 @@ import LRUCache from 'lru-cache';
 import { getInjectiveConfig } from './injective.config';
 import { networkToString } from './injective.mappers';
 import { AccountDetails } from '@injectivelabs/sdk-ts/dist/cjs/types/auth';
+import { logger } from '../../services/logger';
 
 interface MsgBroadcasterTxOptions {
   msgs: Msgs | Msgs[];
@@ -147,12 +148,14 @@ export class MsgBroadcasterLocal {
       injectiveAddress: getInjectiveSignerAddress(transaction.injectiveAddress),
       sequence: this._localSequence++,
     } as MsgBroadcasterTxOptions;
+    logger.debug(`Pushing ${tx} on the queue.`);
     this._txQueue.push(tx);
 
     try {
       while (!this.isNextTx(tx)) {
         await this.sleep(10); // sleep
       }
+      logger.debug(`Executing ${tx} from the queue.`);
       this._isBlocked = true;
 
       /** Account Details **/
@@ -169,6 +172,7 @@ export class MsgBroadcasterLocal {
       const currentNonce = await this._chain.nonceManager.getNextNonce(
         transaction.injectiveAddress
       );
+      logger.debug(`Executing with nonce ${currentNonce}.`);
       txResponse = await this.createAndSend(
         tx,
         timeoutHeight,
@@ -186,6 +190,9 @@ export class MsgBroadcasterLocal {
           txResponse.data.tx_response.raw_log
             .split('account sequence mismatch, expected ')[1]
             .split(',')[0]
+        );
+        logger.debug(
+          `Account sequence mismatch expected. Expected sequence ${expectedSequence}.`
         );
         await this._chain.nonceManager.overridePendingNonce(
           transaction.injectiveAddress,
@@ -205,9 +212,16 @@ export class MsgBroadcasterLocal {
       } else {
         throw new Error(txResponse.data.tx_response.raw_log);
       }
+    } catch (e) {
+      logger.debug(e);
+      throw e;
     } finally {
       this._txQueue.shift();
       this._isBlocked = false;
+    }
+
+    if (txResponse.data.tx_response.code !== 0) {
+      logger.debug(`Tx failed`);
     }
 
     return {

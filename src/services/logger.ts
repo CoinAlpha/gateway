@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import appRoot from 'app-root-path';
 import { ConfigManagerV2 } from './config-manager-v2';
+
 dayjs.extend(utc);
 
 const { LEVEL, MESSAGE } = require('triple-beam');
@@ -52,7 +53,7 @@ const getLogPath = () => {
 };
 
 const allLogsFileTransport = new DailyRotateFile({
-  level: 'info',
+  level: 'debug',
   filename: `${getLogPath()}/logs_gateway_app.log.%DATE%`,
   datePattern: 'YYYY-MM-DD',
   handleExceptions: true,
@@ -60,7 +61,7 @@ const allLogsFileTransport = new DailyRotateFile({
 });
 
 export const logger = winston.createLogger({
-  level: 'info',
+  level: 'debug',
   format: logFileFormat,
   exitOnError: false,
   transports: [allLogsFileTransport],
