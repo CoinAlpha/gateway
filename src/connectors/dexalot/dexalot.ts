@@ -1,14 +1,14 @@
 import {
+  ClobBatchUpdateRequest,
+  ClobDeleteOrderRequest,
+  ClobDeleteOrderRequestExtract,
+  ClobGetOrderRequest,
+  ClobGetOrderResponse,
   ClobMarketsRequest,
   ClobOrderbookRequest,
-  ClobTickerRequest,
-  ClobGetOrderRequest,
   ClobPostOrderRequest,
-  ClobDeleteOrderRequest,
-  ClobGetOrderResponse,
-  ClobBatchUpdateRequest,
+  ClobTickerRequest,
   CreateOrderParam,
-  ClobDeleteOrderRequestExtract,
 } from '../../clob/clob.requests';
 import {
   CLOBish,
@@ -32,11 +32,12 @@ import { indexOf } from 'lodash';
 import path from 'path';
 import { rootPath } from '../../paths';
 import {
-  parseMarkerInfo,
   createBook,
-  parseOrderInfo,
   fromUtf8,
+  parseMarkerInfo,
+  parseOrderInfo,
 } from './dexalot.utils';
+import { TransactionResponse } from '@ethersproject/providers';
 
 export class DexalotCLOB implements CLOBish {
   private static _instances: LRUCache<string, DexalotCLOB>;
@@ -63,6 +64,7 @@ export class DexalotCLOB implements CLOBish {
   public get tradePairsContract(): Contract {
     return this._tradePairsContract;
   }
+
   public set tradePairsContract(value: Contract) {
     this._tradePairsContract = value;
   }
@@ -274,10 +276,7 @@ export class DexalotCLOB implements CLOBish {
       req.orderType === 'LIMIT_MAKER' ? TimeInForce.PO : TimeInForce.GTC
     );
     txData.gasLimit = BigNumber.from(String(this._conf.gasLimitEstimate));
-    const txResponse = await EVMTxBroadcaster.getInstance(
-      this._chain,
-      req.address
-    ).broadcast(txData);
+    const txResponse = await this.broadcastTransaction(req, txData);
     return { txHash: txResponse.hash, clientOrderID };
   }
 
@@ -289,10 +288,7 @@ export class DexalotCLOB implements CLOBish {
         req.orderId
       );
     txData.gasLimit = BigNumber.from(String(this._conf.gasLimitEstimate));
-    const txResponse = await EVMTxBroadcaster.getInstance(
-      this._chain,
-      req.address
-    ).broadcast(txData);
+    const txResponse = await this.broadcastTransaction(req, txData);
     return { txHash: txResponse.hash };
   }
 
@@ -331,11 +327,19 @@ export class DexalotCLOB implements CLOBish {
       txData = await this.buildDeleteOrder(req.cancelOrderParams);
 
     txData.gasLimit = BigNumber.from(String(this._conf.gasLimitEstimate));
-    const txResponse = await EVMTxBroadcaster.getInstance(
+    const txResponse = await this.broadcastTransaction(req, txData);
+    return { txHash: txResponse.hash, clientOrderID: data.clientOrderID };
+  }
+
+  async broadcastTransaction(
+    req: ClobBatchUpdateRequest,
+    txData: PopulatedTransaction
+  ): Promise<TransactionResponse> {
+    logger.debug(`Broadcasting tx: ${JSON.stringify(txData)}`);
+    return await EVMTxBroadcaster.getInstance(
       this._chain,
       req.address
     ).broadcast(txData);
-    return { txHash: txResponse.hash, clientOrderID: data.clientOrderID };
   }
 
   public async buildPostOrder(
